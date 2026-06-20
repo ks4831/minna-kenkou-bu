@@ -2,9 +2,10 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest) {
-  // Server Action POST requests must pass through without modification
-  // Intercepting them causes the routing to break and return HTML instead of JSON
-  if (request.headers.has('next-action')) {
+  // POST requests (Server Actions, form submissions) must pass through without modification.
+  // Redirect logic here would intercept the Server Action response and return HTML
+  // instead of the expected RSC/JSON, causing "Unexpected token '<'" errors on the client.
+  if (request.method !== 'GET') {
     return NextResponse.next()
   }
 

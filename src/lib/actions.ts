@@ -102,6 +102,7 @@ async function checkAndAwardBadges(userId: string, streakDays: number) {
 }
 
 export async function signUp(formData: FormData) {
+  try {
   const supabase = await createClient()
 
   const name = formData.get('name') as string
@@ -146,6 +147,9 @@ export async function signUp(formData: FormData) {
   if (insertError) return { error: insertError.message }
 
   return { success: true, memberNo: nextMemberNo }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : '登録中にエラーが発生しました' }
+  }
 }
 
 export async function signIn(formData: FormData) {
