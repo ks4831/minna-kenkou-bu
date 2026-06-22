@@ -5,6 +5,14 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "みんなの健康部",
   description: "みんなで続ける健康習慣",
+  appleWebApp: {
+    capable: true,
+    title: "みんなの健康部",
+    statusBarStyle: "default",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({
