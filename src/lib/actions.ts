@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { BADGES, HABITS, calcLevel } from '@/types'
 import { revalidatePath } from 'next/cache'
 
@@ -103,6 +104,8 @@ async function checkAndAwardBadges(userId: string, streakDays: number) {
 
 export async function signUp(formData: FormData) {
   try {
+  console.log('[signup] start')
+  console.log('[signup] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
   const supabase = await createClient()
 
   const name = formData.get('name') as string
@@ -121,6 +124,9 @@ export async function signUp(formData: FormData) {
     },
   })
 
+  console.log('[signup] authError:', authError)
+  console.log('[signup] user:', authData?.user?.id ?? null)
+
   if (authError) return { error: authError.message }
   if (!authData.user) return { error: 'ユーザー作成に失敗しました' }
 
@@ -134,7 +140,8 @@ export async function signUp(formData: FormData) {
     ? countData[0].member_no + 1
     : 1
 
-  const { error: insertError } = await supabase.from('users').insert({
+  const adminSupabase = createAdminClient()
+  const { error: insertError } = await adminSupabase.from('users').insert({
     id: authData.user.id,
     member_no: nextMemberNo,
     name,
@@ -144,10 +151,14 @@ export async function signUp(formData: FormData) {
     streak_days: 0,
   })
 
+  console.log('[signup] insertError:', insertError)
+  const result = insertError ? { error: insertError.message } : { success: true, memberNo: nextMemberNo }
+  console.log('[signup] return:', JSON.stringify(result))
   if (insertError) return { error: insertError.message }
 
   return { success: true, memberNo: nextMemberNo }
   } catch (e) {
+    console.log('[signup] catch:', e)
     return { error: e instanceof Error ? e.message : '登録中にエラーが発生しました' }
   }
 }
