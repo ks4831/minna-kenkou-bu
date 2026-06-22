@@ -19,7 +19,11 @@ export default function LoginPage() {
     const result = await signIn(formData)
 
     if (result.error) {
-      setError('メールアドレスかパスワードが正しくありません')
+      setError(
+        result.error.includes('Email not confirmed')
+          ? 'メール確認が完了していません。\n届いたメールのリンクをタップしてからログインしてください。'
+          : 'メールアドレスかパスワードが正しくありません'
+      )
       setLoading(false)
     } else {
       router.push('/dashboard')
@@ -68,7 +72,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700">
+              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 whitespace-pre-line">
                 {error}
               </div>
             )}
