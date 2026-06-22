@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { BADGES, HABITS, LEVELS } from '@/types'
@@ -140,6 +141,21 @@ export default async function DashboardPage() {
             </p>
           </div>
         </div>
+
+        {/* Column link */}
+        <Link
+          href="/articles"
+          className="block bg-green-600 text-white rounded-2xl p-4 hover:bg-green-700 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">📖</span>
+            <div>
+              <p className="font-bold text-sm">健康コラムを読む</p>
+              <p className="text-xs text-green-200 mt-0.5">習慣を続けるためのヒント</p>
+            </div>
+            <span className="ml-auto text-green-300 text-lg">›</span>
+          </div>
+        </Link>
 
         {/* Badges */}
         <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-5">
