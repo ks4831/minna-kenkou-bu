@@ -39,8 +39,9 @@ export default function SignupPage() {
               部員No.{String(success).padStart(3, '0')}
             </p>
             <p className="text-gray-500">
-              メールアドレスの確認メールを送りました。<br />
-              確認後、ログインしてください。
+              確認メールを送信しました。<br />
+              メール内のリンクをタップして登録を完了してください。<br />
+              その後、ログインできます。
             </p>
           </div>
           <Link
@@ -114,6 +115,11 @@ export default function SignupPage() {
                 {error}
               </div>
             )}
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 text-sm text-yellow-800 leading-relaxed">
+              ※登録後、確認メールが届きます。<br />
+              メール内の「Confirm your email address」をタップすると登録が完了します。
+            </div>
 
             <button
               type="submit"
