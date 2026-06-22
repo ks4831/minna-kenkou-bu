@@ -144,6 +144,11 @@ export default async function DashboardPage() {
         {/* Badges */}
         <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-5">
           <h2 className="text-lg font-bold text-gray-800 mb-4">バッジ</h2>
+          {ownedBadges.size === 0 && (
+            <p className="text-xs text-gray-400 mb-3 leading-relaxed">
+              3日連続で記録すると、最初のバッジ「三日坊主卒業」がもらえます。
+            </p>
+          )}
           <div className="space-y-3">
             {BADGES.map((badge) => {
               const owned = ownedBadges.has(badge.key)
