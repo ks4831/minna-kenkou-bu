@@ -80,7 +80,7 @@ export default async function DashboardPage() {
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-4 text-center">
             <p className="text-gray-500 text-xs mb-1">健康レベル</p>
-            <p className="text-2xl font-bold text-green-700">Lv{level}</p>
+            <p className="text-2xl font-bold text-green-700">レベル{level}</p>
             <div className="mt-1 bg-gray-100 rounded-full h-1.5">
               <div
                 className="bg-green-500 rounded-full h-1.5 transition-all"
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
           <div className="bg-white rounded-2xl shadow-sm border border-green-100 p-4 text-center">
             <p className="text-gray-500 text-xs mb-1">総ポイント</p>
             <p className="text-2xl font-bold text-green-700">{totalPoints}</p>
-            <p className="text-gray-500 text-xs">pt</p>
+            <p className="text-gray-500 text-xs">ポイント</p>
           </div>
         </div>
 
@@ -120,8 +120,8 @@ export default async function DashboardPage() {
               </div>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">本日 <span className="font-bold text-green-700">{todayPoints}pt</span> 獲得</p>
-              <p className="text-gray-400 text-xs mt-1">最大 30pt / 日</p>
+              <p className="text-gray-600 text-sm">本日 <span className="font-bold text-green-700">{todayPoints}ポイント</span> 獲得</p>
+              <p className="text-gray-400 text-xs mt-1">最大 30ポイント / 日</p>
             </div>
           </div>
         </div>

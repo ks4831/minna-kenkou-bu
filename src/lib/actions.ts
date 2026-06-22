@@ -5,6 +5,16 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { BADGES, HABITS, calcLevel } from '@/types'
 import { revalidatePath } from 'next/cache'
 
+function toJapaneseError(message: string): string {
+  if (message.includes('User already registered'))
+    return 'このメールアドレスは既に登録されています'
+  if (message.includes('Password should be at least 6 characters'))
+    return 'パスワードは6文字以上で入力してください'
+  if (message.includes('duplicate key value violates unique constraint'))
+    return '本日の記録は既に保存されています'
+  return message
+}
+
 export async function saveDailyRecord(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -30,7 +40,7 @@ export async function saveDailyRecord(formData: FormData) {
       { onConflict: 'user_id,date' }
     )
 
-  if (upsertError) return { error: upsertError.message }
+  if (upsertError) return { error: toJapaneseError(upsertError.message) }
 
   await recalcUserStats(user.id)
 
@@ -127,7 +137,7 @@ export async function signUp(formData: FormData) {
   console.log('[signup] authError:', authError)
   console.log('[signup] user:', authData?.user?.id ?? null)
 
-  if (authError) return { error: authError.message }
+  if (authError) return { error: toJapaneseError(authError.message) }
   if (!authData.user) return { error: 'ユーザー作成に失敗しました' }
 
   const { data: countData } = await supabase
@@ -152,9 +162,9 @@ export async function signUp(formData: FormData) {
   })
 
   console.log('[signup] insertError:', insertError)
-  const result = insertError ? { error: insertError.message } : { success: true, memberNo: nextMemberNo }
+  const result = insertError ? { error: toJapaneseError(insertError.message) } : { success: true, memberNo: nextMemberNo }
   console.log('[signup] return:', JSON.stringify(result))
-  if (insertError) return { error: insertError.message }
+  if (insertError) return { error: toJapaneseError(insertError.message) }
 
   return { success: true, memberNo: nextMemberNo }
   } catch (e) {

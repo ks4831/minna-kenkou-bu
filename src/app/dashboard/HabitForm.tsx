@@ -79,7 +79,7 @@ export default function HabitForm({ initialHabits }: Props) {
               {habit.label}
             </span>
             <span className={`text-sm font-medium ${checked ? 'text-green-600' : 'text-gray-400'}`}>
-              +{habit.points}pt
+              +{habit.points}ポイント
             </span>
           </label>
         )
@@ -87,7 +87,7 @@ export default function HabitForm({ initialHabits }: Props) {
 
       <div className="flex items-center justify-between pt-2">
         <span className="text-gray-600 text-sm">
-          本日獲得予定: <span className="font-bold text-green-700 text-lg">{todayPoints}pt</span>
+          本日獲得予定: <span className="font-bold text-green-700 text-lg">{todayPoints}ポイント</span>
         </span>
         <button
           type="submit"
