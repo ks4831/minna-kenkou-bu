@@ -5,6 +5,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { BADGES, HABITS, calcLevel } from '@/types'
 import { revalidatePath } from 'next/cache'
 
+function getJSTDateString(date = new Date()): string {
+  const jst = new Date(date.getTime() + 9 * 60 * 60 * 1000)
+  return jst.toISOString().split('T')[0]
+}
+
 function toJapaneseError(message: string): string {
   if (message.includes('User already registered'))
     return 'このメールアドレスは既に登録されています'
@@ -31,7 +36,7 @@ export async function saveDailyRecord(formData: FormData) {
     (stretch ? 10 : 0) +
     (weight ? 5 : 0)
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = getJSTDateString()
 
   const { error: upsertError } = await supabase
     .from('daily_records')
@@ -74,8 +79,8 @@ async function recalcUserStats(userId: string) {
 function calcStreak(dates: string[]): number {
   if (!dates.length) return 0
   const sorted = [...dates].sort((a, b) => b.localeCompare(a))
-  const today = new Date().toISOString().split('T')[0]
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+  const today     = getJSTDateString()
+  const yesterday = getJSTDateString(new Date(Date.now() - 86400000))
 
   if (sorted[0] !== today && sorted[0] !== yesterday) return 0
 
