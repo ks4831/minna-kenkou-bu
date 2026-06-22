@@ -16,19 +16,27 @@ type Props = {
 export default function HabitForm({ initialHabits }: Props) {
   const [habits, setHabits] = useState(initialHabits)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   function toggle(key: string) {
     setHabits(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }))
     setSaved(false)
+    setSaveError(null)
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
-      await saveDailyRecord(formData)
-      setSaved(true)
+      const result = await saveDailyRecord(formData)
+      if (result?.error) {
+        setSaveError(result.error)
+        setSaved(false)
+      } else {
+        setSaved(true)
+        setSaveError(null)
+      }
     })
   }
 
@@ -93,6 +101,11 @@ export default function HabitForm({ initialHabits }: Props) {
       {saved && (
         <p className="text-center text-green-600 font-medium text-sm bg-green-50 rounded-xl py-2">
           ✓ 今日の記録を保存しました
+        </p>
+      )}
+      {saveError && (
+        <p className="text-center text-red-600 font-medium text-sm bg-red-50 rounded-xl py-2">
+          保存に失敗しました: {saveError}
         </p>
       )}
     </form>
